@@ -1,4 +1,4 @@
-import Server from '@stellar/stellar-sdk';
+import rpc from '@stellar/stellar-sdk';
 import { TransactionBuilder, Networks, Operation, Keypair, xdr } from '@stellar/stellar-sdk';
 
 /**
@@ -18,7 +18,7 @@ export async function deployPool(
   if (!factoryContractId) throw new Error('ID de contrato inválido');
 
   // Configuración correcta del RPC usando Server de stellar-sdk
-  const server = new Server('https://horizon-testnet.stellar.org');
+  const server = new rpc.Server('https://soroban-testnet.stellar.org');
   const sourceKeypair = Keypair.fromSecret(sourceSecretKey);
   const account = await server.loadAccount(sourceKeypair.publicKey());
 
