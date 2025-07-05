@@ -49,3 +49,19 @@ export async function createAndFundWallet() {
     fundingResponse
   };
 }
+
+/**
+ * Obtiene el balance de una cuenta de Stellar
+ * @param publicKey La clave pública de la cuenta
+ * @returns Una promesa que se resuelve con el balance (array de balances)
+ */
+export async function getWalletBalance(publicKey: string): Promise<any> {
+  try {
+    const server = new Horizon.Server('https://horizon-testnet.stellar.org');
+    const account = await server.accounts().accountId(publicKey).call();
+    return account.balances;
+  } catch (error) {
+    console.error('Error al obtener el balance de la cuenta:', error);
+    throw error;
+  }
+}

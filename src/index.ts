@@ -1,30 +1,30 @@
 // Entry point for the app
-import { createWallet, fundAccountWithFriendbot, createAndFundWallet } from './createWallet';
+import { createWallet, fundAccountWithFriendbot, createAndFundWallet, getWalletBalance } from './createWallet';
+import { deployPool, exampleDeployParams } from './blendPoolFactory';
 
 async function main() {
   console.log('Creando una nueva wallet de Stellar...');
   
   try {
-    // Método 1: Crear wallet y luego financiarla por separado
-    console.log('\n--- Método 1: Crear wallet y financiarla por separado ---');
-    const wallet = createWallet();
-    console.log('Nueva wallet creada:');
-    console.log(`Clave pública: ${wallet.publicKey}`);
-    console.log(`Clave secreta: ${wallet.secretKey}`);
-    
-    console.log('\nFinanciando la wallet con Friendbot...');
-    const fundingResponse = await fundAccountWithFriendbot(wallet.publicKey);
-    console.log('Respuesta de financiación:', fundingResponse);
-    
-    // Método 2: Crear y financiar wallet en un solo paso
-    console.log('\n--- Método 2: Crear y financiar wallet en un solo paso ---');
-    const result = await createAndFundWallet();
-    console.log('Nueva wallet creada y financiada:');
-    console.log(`Clave pública: ${result.wallet.publicKey}`);
-    console.log(`Clave secreta: ${result.wallet.secretKey}`);
-    console.log('Respuesta de financiación:', result.fundingResponse);
+   
+    // --- Ejemplo: Llamar a deploy() del pool-factory ---
+    // Reemplaza estos valores por los reales de testnet
+    const factoryContractId = 'CDIE73IJJKOWXWCPU5GWQ745FUKWCSH3YKZRF5IQW7GE3G7YAZ773MYK';
+    // Usar clave secreta desde variable de entorno si está definida
+    const sourceSecretKey = process.env.SECRET_KEY; // O la clave secreta de la cuenta admin
+    try {
+      if (!sourceSecretKey) {
+        throw new Error('La clave secreta de la cuenta fuente no está definida. Por favor, establece la variable de entorno SECRET_KEY.');
+      }
+      const txHash = await deployPool(sourceSecretKey, factoryContractId, exampleDeployParams);
+      console.log('Transacción de deploy enviada. Hash:', txHash);
+    } catch (err) {
+      console.error('Error al desplegar la pool:', err);
+    }
     
     console.log('\n¡Proceso completado con éxito!');
+
+
   } catch (error) {
     console.error('Error durante el proceso:', error);
   }

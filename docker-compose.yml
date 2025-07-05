@@ -4,6 +4,8 @@ services:
     container_name: real-estate-pool
     volumes:
       - .:/workspace
+    env_file:
+      - .env
     ipc: host
     networks:
       - real-estate-pool-network
