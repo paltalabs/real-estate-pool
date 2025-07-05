@@ -1,5 +1,5 @@
-import rpc from '@stellar/stellar-sdk';
-import { TransactionBuilder, Networks, Operation, Keypair, xdr } from '@stellar/stellar-sdk';
+import * as StellarSdk from "@stellar/stellar-sdk";
+
 
 /**
  * Llama a la función deploy() del contrato pool-factory en Blend.
@@ -14,39 +14,43 @@ export async function deployPool(
   deployParams: any
 ): Promise<string> {
   // Validar claves
-  if (!Keypair.fromSecret(sourceSecretKey)) throw new Error('Clave secreta inválida');
+  if (!StellarSdk.Keypair.fromSecret(sourceSecretKey)) throw new Error('Clave secreta inválida');
   if (!factoryContractId) throw new Error('ID de contrato inválido');
 
   // Configuración correcta del RPC usando Server de stellar-sdk
-  const server = new rpc.Server('https://soroban-testnet.stellar.org');
-  const sourceKeypair = Keypair.fromSecret(sourceSecretKey);
-  const account = await server.loadAccount(sourceKeypair.publicKey());
+  const networkRPC = "https://soroban-testnet.stellar.org";
+  const server = new StellarSdk.rpc.Server(networkRPC);
+  const network_passphrase = StellarSdk.Networks.TESTNET;
+
+  const sourceKeypair = StellarSdk.Keypair.fromSecret(sourceSecretKey);
+  // const account = await server.loadAccount(sourceKeypair.publicKey());
 
   // Construir la operación de invocación de contrato
-  const tx = new TransactionBuilder(account, {
-    fee: await server.fetchBaseFee(),
-    networkPassphrase: Networks.TESTNET,
-  })
-    .addOperation(Operation.invokeHostFunction({
-      function: xdr.HostFunction.hostFunctionTypeInvokeContract(),
-      parameters: [
-        // Aquí debes construir los parámetros según el ABI del contrato Blend
-        // xdr.ScVal.scvAddress(xdr.ScAddress.fromString(factoryContractId)),
-        // xdr.ScVal.scvSymbol('deploy'),
-        // ...otros parámetros
-      ],
-    }))
-    .setTimeout(60)
-    .build();
+  // const tx = new TransactionBuilder(account, {
+  //   fee: await server.fetchBaseFee(),
+  //   networkPassphrase: Networks.TESTNET,
+  // })
+  //   .addOperation(Operation.invokeHostFunction({
+  //     function: xdr.HostFunction.hostFunctionTypeInvokeContract(),
+  //     parameters: [
+  //       // Aquí debes construir los parámetros según el ABI del contrato Blend
+  //       // xdr.ScVal.scvAddress(xdr.ScAddress.fromString(factoryContractId)),
+  //       // xdr.ScVal.scvSymbol('deploy'),
+  //       // ...otros parámetros
+  //     ],
+  //   }))
+  //   .setTimeout(60)
+  //   .build();
 
-  tx.sign(sourceKeypair);
+  // tx.sign(sourceKeypair);
 
-  try {
-    const response = await server.submitTransaction(tx);
-    return response.hash;
-  } catch (error) {
-    throw new Error(`Error al desplegar la pool: ${error}`);
-  }
+  // try {
+  //   const response = await server.submitTransaction(tx);
+  //   return response.hash;
+  // } catch (error) {
+  //   throw new Error(`Error al desplegar la pool: ${error}`);
+  // }
+  return ''
 }
 
 /**
