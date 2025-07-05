@@ -4,7 +4,7 @@
 Este proyecto utiliza tecnologías blockchain, específicamente Blend y Stellar SDK para JavaScript. El objetivo es desarrollar aplicaciones seguras, eficientes y bien documentadas que interactúen con la red Stellar y/o Blend.
 
 ## Reglas Generales
-- Usa la doumentación #fetch https://stellar.github.io/js-stellar-sdk/
+- Usa la doumentación #fetch https://stellar.github.io/js-stellar-sdk/ y la de #fetch https://stellar.github.io/js-stellar-base/index.html
 - Ejecuta todo el codigo usando Docker.  docker exec real-estate-pool <command>
 - Todo el código debe estar escrito en TypeScript.
 - Usa las mejores prácticas de desarrollo para contratos inteligentes y transacciones.
